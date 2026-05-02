@@ -11,10 +11,8 @@
 
 import type { SerperKeywordResult } from './types';
 
-// Dev: proxied through Vite to avoid CORS. Prod: direct URL.
-const SERPER_ENDPOINT = (import.meta as any).env?.DEV
-  ? '/api/serper/search'
-  : 'https://google.serper.dev/search';
+// Dev: Vite proxy → Prod: Vercel serverless function (both at same path)
+const SERPER_ENDPOINT = '/api/serper/search';
 
 export interface SerperClientConfig {
   apiKey: string;

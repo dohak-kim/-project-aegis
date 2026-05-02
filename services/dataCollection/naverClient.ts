@@ -18,9 +18,7 @@ import type { NaverSearchResult, NaverKeywordVolume, NaverVolumeRange, NaverTren
 
 // ── Naver Search API ────────────────────────────────────────────────────────
 
-const NAVER_SEARCH_BASE = (import.meta as any).env?.DEV
-  ? '/api/naver/v1/search'
-  : 'https://openapi.naver.com/v1/search';
+const NAVER_SEARCH_BASE = '/api/naver/v1/search';
 
 export interface NaverSearchConfig {
   clientId: string;
@@ -35,12 +33,8 @@ export async function fetchNaverSearch(
   config: NaverSearchConfig,
   display = 20,
 ): Promise<NaverSearchResult> {
-  const url = new URL(`${NAVER_SEARCH_BASE}/${type}`);
-  url.searchParams.set('query', keyword);
-  url.searchParams.set('display', String(display));
-  url.searchParams.set('sort', 'sim'); // relevance sort
-
-  const res = await fetch(url.toString(), {
+  const params = new URLSearchParams({ query: keyword, display: String(display), sort: 'sim' });
+  const res = await fetch(`${NAVER_SEARCH_BASE}/${type}?${params}`, {
     headers: {
       'X-Naver-Client-Id': config.clientId,
       'X-Naver-Client-Secret': config.clientSecret,
@@ -69,9 +63,7 @@ export async function fetchNaverSearch(
 
 // ── Naver Search Ads (Keyword Volume) API ───────────────────────────────────
 
-const NAVER_AD_BASE = (import.meta as any).env?.DEV
-  ? '/api/naver-ad'
-  : 'https://api.naver.com';
+const NAVER_AD_BASE = '/api/naver-ad';
 
 export interface NaverAdConfig {
   apiKey: string;
@@ -144,9 +136,7 @@ export async function fetchNaverKeywordVolumesBatch(
 
 // ── Naver DataLab 검색어트렌드 API ──────────────────────────────────────────────
 
-const NAVER_DATALAB_BASE = (import.meta as any).env?.DEV
-  ? '/api/naver/v1/datalab/search'
-  : 'https://openapi.naver.com/v1/datalab/search';
+const NAVER_DATALAB_BASE = '/api/naver/v1/datalab/search';
 
 /**
  * Fetches 12-month relative search trend for up to 5 keywords per call.
